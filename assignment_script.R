@@ -10,10 +10,21 @@ surveys_complete <- surveys %>%
   filter(!is.na(weight)) %>%
   filter(sex !="") %>%
   filter(species_id !="")
-#plotting the complete data based on the number of species
+
+#plotting the number of species and assign it to variable
 counted_by_species <- surveys_complete %>% 
   group_by(species_id) %>% tally()
-ggplot(counted_by_species, aes(x=species_id, y=n, color=species_id)) + geom_col()
+species_plot <- ggplot(data = counted_by_species, mapping = aes(x = species_id, y = n)) + 
+  geom_col() + theme(axis.text.x = element_text(size = 8, angle = 90))
+
+#plotting the number of genus and assign it to variable
+counted_by_genus <- surveys_complete %>% 
+  group_by(genus) %>% tally()
+genus_plot <- ggplot(data = counted_by_genus, mapping = aes(x = genus, y = n)) + geom_col() +
+  theme(axis.text.x = element_text(angle = 30, size = 8))
+
+#combine species plot and genus plot together
+grid.arrange(species_plot, genus_plot, ncol=2, widths=c(6,6))
 
 #list of species with n >= 1000
 species_count <- surveys_complete %>%
