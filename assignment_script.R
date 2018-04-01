@@ -10,6 +10,10 @@ surveys_complete <- surveys %>%
   filter(!is.na(weight)) %>%
   filter(sex !="") %>%
   filter(species_id !="")
+#plotting the complete data based on the number of species
+counted_by_species <- surveys_complete %>% 
+  group_by(species_id) %>% tally()
+ggplot(counted_by_species, aes(x=species_id, y=n, color=species_id)) + geom_col()
 
 #list of species with n >= 1000
 species_count <- surveys_complete %>%
