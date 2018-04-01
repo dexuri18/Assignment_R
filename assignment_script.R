@@ -1,5 +1,9 @@
 #load the tidyverse library
-library(tidyverse) 
+library(tidyverse)
+
+install.packages("gridExtra")
+library(gridExtra) 
+
 
 #load the data
 surveys <- read.csv("data/portal_data_joined.csv") 
@@ -10,6 +14,24 @@ surveys_complete <- surveys %>%
   filter(!is.na(weight)) %>%
   filter(sex !="") %>%
   filter(species_id !="")
+
+#piechart of the records
+count_all_records <- surveys %>% tally()
+count_complete <- surveys %>%
+  filter(!is.na(hindfoot_length)) %>%
+  filter(!is.na(weight)) %>%
+  filter(sex !="") %>%
+  filter(species_id !="") %>%
+  tally()
+count_unclomplete <- count_all_records - count_complete
+
+slices <- c(count_complete[1,1],count_unclomplete[1,1])
+lbls <- c("complete records", "uncomplete records")
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct) # add percents to labels 
+lbls <- paste(lbls,"%",sep="") # ad % to labels 
+pie(slices,labels = lbls, col=rainbow(length(lbls)),
+    main="Pie Chart of Data Completeness")
 
 #plotting the number of species and assign it to variable
 counted_by_species <- surveys_complete %>% 
@@ -26,36 +48,38 @@ genus_plot <- ggplot(data = counted_by_genus, mapping = aes(x = genus, y = n)) +
 #combine species plot and genus plot together
 grid.arrange(species_plot, genus_plot, ncol=2, widths=c(6,6))
 
-#list of species with n >= 1000
+#list of species with n >= 2500
 species_count <- surveys_complete %>%
   group_by(species) %>%
   tally() %>%
-  filter(n >= 1000)
+  filter(n >= 2500)
 
-#filter of the common sample (>= 1000)
+#filter of the common sample (>= 2500)
 surveys_common <- surveys_complete %>%
   filter(species %in% species_count$species)
   
 #summary of common sample's weight by species 
 surveys_common %>%
-  group_by(species,sex) %>%
+  group_by(species) %>%
   summarize(mean_weight = mean(weight),
             max_weight = max(weight),
             min_weight = min(weight))
 
 species_vs_weight <- select(surveys_common, species, weight)
 plot(species_vs_weight)
+ggplot(surveys_common, aes(x = species, y = weight)) + geom_boxplot()+xlab("Species")
 
 
-#summary of common sample's legth of hindfoot by species 
+#summary of common sample's length of hindfoot by species 
 surveys_common %>%
-  group_by(species,sex) %>%
+  group_by(species) %>%
   summarize(mean_length = mean(hindfoot_length),
             max_length = max(hindfoot_length),
             min_length = min(hindfoot_length))
 
 species_vs_length <- select(surveys_common, species, hindfoot_length)
 plot(species_vs_length)
+ggplot(surveys_common, aes(x = species, y = hindfoot_length)) + geom_boxplot()+xlab("Species")
 
 
 # Linier Model Analysis between weight and hindfoot legth on the most common species
@@ -73,6 +97,7 @@ plot(weight_vs_length)
 lm_weight_vs_length <- lm(hindfoot_length ~ weight, data=most_common_data)
 summary(lm_weight_vs_length)
 plot(lm_weight_vs_length)
+
 
 
 
