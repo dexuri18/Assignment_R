@@ -7,8 +7,8 @@ This repository was created as part of assignment on Big Data Analysis course, w
 
 ## Contents of the repository
 This repository consists of:
-1. Script R (* .R). It is a raw script written by the author (Deky and Tono) covering every command used in the analysis.
-2. Renddown (* .Rmd). It is a summary of the R analysis performed.
+1. Script R (* .R). It is a raw script written by the authors (Deky and Tono) covering every command used in the analysis.
+2. Rmarkdown (* .Rmd). It is a summary of the R analysis performed.
 3. Pdf file (* .pdf). It is a knit result of Rmarkdown
 4. Readme.md. An explanation of this repository
 5. The data folder containing the data files being analyzed.
@@ -20,4 +20,6 @@ to replicate the process:
 2. Download all the file/folder on this repository
 3. Run the scripts.Rproj that will open in RStudio
 
-to be continued
+
+
+---to be continued---
