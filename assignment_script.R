@@ -23,6 +23,7 @@ count_complete <- surveys %>%
   filter(sex !="") %>%
   filter(species_id !="") %>%
   tally()
+
 count_unclomplete <- count_all_records - count_complete
 
 slices <- c(count_complete[1,1],count_unclomplete[1,1])
