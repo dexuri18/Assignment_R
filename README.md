@@ -3,7 +3,7 @@
 Deky and Tono
 
 ## Description
-This repository was created as part of the Big Data Analysis - Spring 2018 University of Rhode Island duties assignment, which will attempt to analyze a database of rodents in Rhode Island to determine the relationship between the weight and length of hindfoot, using R Studio.
+This repository was created as part of assignment on Big Data Analysis course, which will attempt to analyze a database of rodents in Rhode Island to determine the relationship between the weight and length of hindfoot, using R Studio.
 
 ## Contents of the repository
 This repository consists of:
