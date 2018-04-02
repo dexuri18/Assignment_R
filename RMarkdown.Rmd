@@ -1,0 +1,198 @@
+---
+title: "Relationships of Weight and Hindfoot Length on Rodents in RI"
+author: "Deky and Tono"
+date: "March 31, 2018"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(gridExtra)
+library("ggpubr")
+```
+
+## Summary of The Data
+
+The data of Rodent were taken from 1977 until 2002 with total 34,786 records have been colected. However, out of the total data, some records are incomplete and thus would be biased if included in the analysis. The following is a comparison of complete and incomplete data counts, in which further the complete data will be used in the analysis.
+
+```{r plot1, echo=FALSE}
+surveys <- read.csv("data/portal_data_joined.csv") 
+
+count_all_records <- surveys %>% tally()
+count_complete <- surveys %>%
+  filter(!is.na(hindfoot_length)) %>%
+  filter(!is.na(weight)) %>%
+  filter(sex !="") %>%
+  filter(species_id !="") %>%
+  tally()
+
+count_unclomplete <- count_all_records - count_complete
+
+slices <- c(count_complete[1,1],count_unclomplete[1,1])
+lbls <- c("complete records", "uncomplete records")
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct) # add percents to labels 
+lbls <- paste(lbls,"%",sep="") # ad % to labels 
+
+pie(slices,labels = lbls, col=rainbow(length(lbls)),
+    main="Pie Chart of Data Completeness")
+```
+
+Data that has been done validation and complete hereinafter seen the distribution of the number of samples per species and genus, as follows:
+
+```{r plot2,echo=FALSE}
+#load the data
+surveys <- read.csv("data/portal_data_joined.csv")
+
+#clean the data from NA and blank value
+surveys_complete <- surveys %>%
+  filter(!is.na(hindfoot_length)) %>%
+  filter(!is.na(weight)) %>%
+  filter(sex !="") %>%
+  filter(species_id !="")
+
+#plotting the number of species and assign it to variable
+species_plot <- ggplot(data = surveys_complete) + geom_bar(mapping = aes(x = species_id, fill = sex)) +
+  theme(axis.text.x = element_text(size = 8, angle = 90))
+
+#plotting the number of genus and assign it to variable
+genus_plot <- ggplot(data = surveys_complete) + geom_bar(mapping = aes(x = genus, fill = sex)) + 
+  theme(axis.text.x = element_text(angle = 30, size = 8))
+
+#combine species plot and genus plot together
+grid.arrange(species_plot, genus_plot, ncol=2, widths=c(6,6))
+
+```
+
+##Common Records
+
+From the distribution of the number of samples per species above shows that only 4 species that have recoded above 2500 times from 1977 until 2002. That are baileyi, merriami, ordii and penicillatus. Below are the summary of weight and length of hindfoot of the 4 species.
+```{r plot3,echo=FALSE}
+#load the data
+surveys <- read.csv("data/portal_data_joined.csv")
+
+#clean the data from NA and blank value
+surveys_complete <- surveys %>%
+  filter(!is.na(hindfoot_length)) %>%
+  filter(!is.na(weight)) %>%
+  filter(sex !="") %>%
+  filter(species_id !="")
+
+#list of species with n >= 2500
+species_count <- surveys_complete %>%
+  group_by(species) %>%
+  tally() %>%
+  filter(n >= 2500)
+
+#filter of the common sample (>= 2500)
+surveys_common <- surveys_complete %>%
+  filter(species %in% species_count$species)
+
+ggplot(surveys_common, aes(x = species, y = weight)) + geom_boxplot()+xlab("Species")
+```
+
+Species ordii has the highest mean weight among the other.
+
+
+```{r plot4,echo=FALSE}
+
+#load the data
+surveys <- read.csv("data/portal_data_joined.csv")
+
+#clean the data from NA and blank value
+surveys_complete <- surveys %>%
+  filter(!is.na(hindfoot_length)) %>%
+  filter(!is.na(weight)) %>%
+  filter(sex !="") %>%
+  filter(species_id !="")
+
+#list of species with n >= 2500
+species_count <- surveys_complete %>%
+  group_by(species) %>%
+  tally() %>%
+  filter(n >= 2500)
+
+#filter of the common sample (>= 2500)
+surveys_common <- surveys_complete %>%
+  filter(species %in% species_count$species)
+
+ggplot(surveys_common, aes(x = species, y = hindfoot_length)) + geom_boxplot()+xlab("Species")
+
+```
+
+Species meriami has the highest length of hidfoot with spesies ordii just slightly behind the first.
+
+##Linier Model of Weight and Hindfoot Length
+
+Analysis of the relationship of weight and hindfoot length is done to the species with the largest sample number, that is merriami, by using linear model. From the analysis obtained linear model as follows:
+
+```{r plot5, echo=FALSE}
+#load the data
+surveys <- read.csv("data/portal_data_joined.csv") 
+
+#clean the data from NA and blank value
+surveys_complete <- surveys %>%
+  filter(!is.na(hindfoot_length)) %>%
+  filter(!is.na(weight)) %>%
+  filter(sex !="") %>%
+  filter(species_id !="")
+
+#filter of the common sample (>= 2500)
+surveys_common <- surveys_complete %>%
+  filter(species %in% species_count$species)
+
+# Linier Model Analysis between weight and hindfoot legth on the most common species
+
+#create object for analysis : 
+most_common_data <- surveys_common %>%
+  filter(species == "merriami")
+
+weight_vs_length <- select(most_common_data, weight, hindfoot_length)
+
+#fitting linier model between weight and length of hindfoot
+lm_weight_vs_length <- lm(hindfoot_length ~ weight, data=most_common_data)
+
+plot(lm_weight_vs_length)
+```
+
+with the summary of the linier model is listed below:
+
+```{r plot6,echo=FALSE}
+#load the data
+surveys <- read.csv("data/portal_data_joined.csv") 
+
+#clean the data from NA and blank value
+surveys_complete <- surveys %>%
+  filter(!is.na(hindfoot_length)) %>%
+  filter(!is.na(weight)) %>%
+  filter(sex !="") %>%
+  filter(species_id !="")
+
+#filter of the common sample (>= 2500)
+surveys_common <- surveys_complete %>%
+  filter(species %in% species_count$species)
+
+# Linier Model Analysis between weight and hindfoot length on the most common species
+
+#create object for analysis : 
+most_common_data <- surveys_common %>%
+  filter(species == "merriami")
+
+weight_vs_length <- select(most_common_data, weight, hindfoot_length)
+
+#fitting linier model between weight and length of hindfoot
+lm_weight_vs_length <- lm(hindfoot_length ~ weight, data=most_common_data)
+summary(lm_weight_vs_length)
+```
+
+from the result of linier model above can be drawn conclusion that .....
+
+
+
+
+
+
