@@ -147,7 +147,7 @@ surveys_complete %>% group_by(sex) %>%
 ##visualize the data using box plots
 ggboxplot(surveys_complete, x = "sex", y = "weight", color = "sex", ylab = "Weight", xlab = "Sex")
 ##do the two population have the same variances? use "f-test". answer = no because p-value < 0.05
-var.test(weight ~ sex, data = surveys_complete)
+result_ftest_weight <- var.test(weight ~ sex, data = surveys_complete)
 ##is there any significant difference between female and male weights? use "t-test".
 ##answer = no, because p value > 0.05. (female and male = same)
 t.test(weight ~ sex, data = surveys_complete, var.equal = FALSE)
@@ -162,7 +162,7 @@ surveys_complete %>% group_by(sex) %>%
 ##visualize the data using box plots
 ggboxplot(surveys_complete, x = "sex", y = "hindfoot_length", color = "sex", ylab = "Hindfoot Length", xlab = "Sex")
 ##do the two population have the same variances? use "f-test". answer = no because p-value < 0.05
-var.test(hindfoot_length ~ sex, data = surveys_complete)
+result_ftest_hindfootlength <-var.test(hindfoot_length ~ sex, data = surveys_complete)
 ##is there any significant difference between female and male hindfoot length? use "t-test".
 ##answer = no, because p value > 0.05. (female and male = same)
 t.test(hindfoot_length ~ sex, data = surveys_complete, var.equal = FALSE)
