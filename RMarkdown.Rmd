@@ -19,6 +19,8 @@ library("ggpubr")
 
 Data used in this assignment was derived from the time series data which were collected from 1977 to 2002 with the total numbers of recorded data is 34,786.  However, we found that some of the records are incomplete which could lead to bias in our analysis. Therefore, we excluded the incomplete data in our further analysis. The comparison of the complete and incomplete data entries can be seen in Figure below.
 
+
+
 ```{r plot1, echo=FALSE}
 surveys <- read.csv("data/portal_data_joined.csv") 
 
