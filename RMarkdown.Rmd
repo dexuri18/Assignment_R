@@ -46,7 +46,7 @@ pie(slices,labels = lbls, col=rainbow(length(lbls)),
 
 The figure below delineates the general patterns of the data based on the number of samples for each species and genus, also the proportion of sex (female and male) for each category. 
 
-```{r plot2,echo=FALSE}
+```{r plot_a,echo=FALSE}
 #load the data
 surveys <- read.csv("data/portal_data_joined.csv")
 
@@ -72,7 +72,7 @@ grid.arrange(species_plot, genus_plot, ncol=2, widths=c(8,7))
 
 In addition to the general pattern of the data in the above, we also plotted the distribution of weight and hindfoot length for the overall sample and the distribution of the average (mean) weight and hindfoot length for each species, as follows: 
 
-```{r plot_a,echo=FALSE}
+```{r plot_b,echo=FALSE}
 #load the data
 surveys <- read.csv("data/portal_data_joined.csv")
 
@@ -109,7 +109,7 @@ grid.arrange(weight_distribution, hlength_distribution, weight_sum_plot,
 
 The general pattern of the weight and hindfoot length relationship of all species combined follows the bounded exponential trendline. Based on the R^2^ result, roughly around 72.5% of the population are matched with this trendline. 
 
-```{r plot_b,echo=FALSE}
+```{r plot_c,echo=FALSE}
 #load the data
 surveys <- read.csv("data/portal_data_joined.csv")
 
@@ -148,7 +148,7 @@ plot_4 + scale_linetype(name = "", breaks = "r2",
 
 From the distribution of the number of samples per species in the above, it shows that only four species that have recoded sample above 2500 entries from the period of 1977 to 2002. These species included, baileyi, merriami, ordii and penicillatus. Figures below are the summary of weight and length of hindfoot of the four species. 
 
-```{r plot3,echo=FALSE}
+```{r plot2,echo=FALSE}
 #load the data
 surveys <- read.csv("data/portal_data_joined.csv")
 
@@ -174,7 +174,7 @@ ggplot(surveys_common, aes(x = species, y = weight)) + geom_boxplot()+xlab("Spec
 
 From the results, the ordii species has the highest mean weight among the other, whereas, the merriami species has the highest hindfoot length followed by ordii species in the second place. 
 
-```{r plot4,echo=FALSE}
+```{r plot3,echo=FALSE}
 
 #load the data
 surveys <- read.csv("data/portal_data_joined.csv")
@@ -204,7 +204,7 @@ ggplot(surveys_common, aes(x = species, y = hindfoot_length)) + geom_boxplot()+x
 
 In order to analyze the weight and hindfoot length relationship thoroughly, we analyze the data from the species which has the most significant sample number which is *merriami* species. The analysis was done using the linear model, as follows:
 
-```{r plot5, echo=FALSE}
+```{r plot4, echo=FALSE}
 #load the data
 surveys <- read.csv("data/portal_data_joined.csv") 
 
@@ -235,7 +235,7 @@ plot(lm_weight_vs_length)
 
 The summary of the linear model is listed below:
 
-```{r plot6,echo=FALSE}
+```{r plot5,echo=FALSE}
 #load the data
 surveys <- read.csv("data/portal_data_joined.csv") 
 
@@ -267,7 +267,48 @@ As we can from the linear model result in the above, the R^2^ shows that roughly
 
 ###Additional analysis
 
+```{r plot_d,echo=FALSE}
+#load the data
+surveys <- read.csv("data/portal_data_joined.csv")
 
+#clean the data from NA and blank value
+surveys_complete <- surveys %>%
+  filter(!is.na(hindfoot_length)) %>%
+  filter(!is.na(weight)) %>%
+  filter(sex !="") %>%
+  filter(species_id !="")
+
+#testing the mean weight between sex to see the difference
+#Is the mean weight of female is significantly different compared to the male?
+##compute the summary statistic
+surveys_complete %>% group_by(sex) %>%
+  summarise(count = n(),
+            mean = mean(weight),
+            sd = sd(weight))
+##visualize the data using box plots
+ggboxplot(surveys_complete, x = "sex", y = "weight", color = "sex", ylab = "Weight", xlab = "Sex")
+##do the two population have the same variances? use "f-test". answer = no because p-value < 0.05
+var.test(weight ~ sex, data = surveys_complete)
+##is there any significant difference between female and male weights? use "t-test".
+##answer = no, because p value > 0.05. (female and male = same)
+t.test(weight ~ sex, data = surveys_complete, var.equal = FALSE)
+
+#testing the mean hindfoot length between sex to see the difference
+#Is the mean hindfoot length of female is significantly different compared to the male?
+##compute the summary statistic
+surveys_complete %>% group_by(sex) %>%
+  summarise(count = n(),
+            mean = mean(hindfoot_length),
+            sd = sd(hindfoot_length))
+##visualize the data using box plots
+ggboxplot(surveys_complete, x = "sex", y = "hindfoot_length", color = "sex", ylab = "Hindfoot Length", xlab = "Sex")
+##do the two population have the same variances? use "f-test". answer = no because p-value < 0.05
+var.test(hindfoot_length ~ sex, data = surveys_complete)
+##is there any significant difference between female and male hindfoot length? use "t-test".
+##answer = no, because p value > 0.05. (female and male = same)
+t.test(hindfoot_length ~ sex, data = surveys_complete, var.equal = FALSE)
+
+```
 
 
 
