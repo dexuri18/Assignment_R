@@ -85,8 +85,7 @@ plot_4 <- plot_3 + theme_minimal() +
         title = element_text(size = 10, face = "bold", color = "gray20")) 
 mR2 <- summary(lm(hindfoot_length ~ weight + log(weight), data = surveys_complete))$r.squared
 mR2 <- paste0(format(mR2, digits = 3))
-W_L_realtion_plot_all_species <- plot_4 + 
-  scale_linetype(name = "", breaks = "r2",
+plot_4 + scale_linetype(name = "", breaks = "r2",
                  labels = list(bquote(R^2==.(mR2))), 
                  guide = guide_legend(override.aes = list(linetype = 1, size = 2, color = "red")))
 
