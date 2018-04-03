@@ -3,7 +3,7 @@
 Deky and Tono
 
 ## Description
-This repository was created as part of assignment on Big Data Analysis course, which will attempt to analyze a database of rodents in Rhode Island to determine the relationship between the weight and length of hindfoot, using R Studio.
+This repository was created as part of assignment on Big Data Analysis course, which will attempt to analyze a database of rodents to determine the relationship between the weight and length of hindfoot, using R Studio.
 
 ## Contents of the repository
 This repository consists of:
@@ -15,11 +15,15 @@ This repository consists of:
 6. scripts.Rproj. It is the project file for RStudio.
 
 ## How to
-to replicate the process:
+To replicate the process:
 1. Install the RStudio
 2. Download all the file/folder on this repository
 3. Run the scripts.Rproj that will open in RStudio
 
-
-
----to be continued---
+## Analysis
+Analyzes performed on this repository include:
+1. Data completeness
+2. Number of samples for each species and genus, also the proportion of sex (female and male) for each category
+3. Distribution of weight and hindfoot length for the overall sample and the distribution of the mean (weight) weight and hindfoot length for each species
+4. The Weight and Hindfoot Length Relationship Analysis for all complete dataset, and
+5. The linear model of weight and hindfoot length of the merriami species
