@@ -263,6 +263,7 @@ summary(lm_weight_vs_length)
 
 As we can from the linear model result in the above, the R^2^ shows that roughly around 12% of the population fitted to the linear model. The p-value is smaller than the significance level 0.05 implying that there is no relationship between the mean weight and the hindfoot length of the merriami species. In other words, the size of the hindfoot length is not associated with the weight of this species and vice versa.
 
+###Additional analysis
 
 
 
