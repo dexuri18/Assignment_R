@@ -3,8 +3,8 @@ title: "The Weight and Hindfoot Length Relationships of Rodents in southern Ariz
 author: "Deky and Tono"
 date: "March 31, 2018"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
   word_document: default
 ---
 
@@ -200,7 +200,7 @@ ggplot(surveys_common, aes(x = species, y = hindfoot_length)) + geom_boxplot()+x
 
 ```
 
-###The linier model of weight and hindfoot length of the merriami species
+###The linear model of weight and hindfoot length of the merriami species
 
 In order to analyze the weight and hindfoot length relationship thoroughly, we analyze the data from the species which has the most significant sample number which is *merriami* species. The analysis was done using the linear model, as follows:
 
@@ -263,9 +263,11 @@ lm_weight_vs_length <- lm(hindfoot_length ~ weight, data=most_common_data)
 summary(lm_weight_vs_length)
 ```
 
-As we can from the linear model result in the above, the R^2^ shows that roughly around 12% of the population fitted to the linear model. The p-value is smaller than the significance level 0.05 implying that there is no relationship between the mean weight and the hindfoot length of the merriami species. In other words, the size of the hindfoot length is not associated with the weight of this species and vice versa.
+As we can from the linear model result in the above, the R^2^ shows that roughly around 12% of the population fitted to the linear model. The p-value is < 2.2e-16 which is a lot smaller than the significance level alpha = 0.05 implying that there is no relationship between the mean weight and the hindfoot length of the merriami species. In other words, the size of the hindfoot length is not associated with the weight of this species and vice versa.
 
 ###Additional analysis
+
+In addition to all analysis that been committed, we add the t-test statistical analysis to see if the mean weight and the hindfoot length of female species are significantly different from the male species. We also use the box plots to visualize the data for both variables. The result of this analysis can be seen below.  
 
 ```{r plot_d,echo=FALSE}
 #load the data
@@ -280,35 +282,37 @@ surveys_complete <- surveys %>%
 
 #testing the mean weight between sex to see the difference
 #Is the mean weight of female is significantly different compared to the male?
-##compute the summary statistic
-surveys_complete %>% group_by(sex) %>%
-  summarise(count = n(),
-            mean = mean(weight),
-            sd = sd(weight))
 ##visualize the data using box plots
 ggboxplot(surveys_complete, x = "sex", y = "weight", color = "sex", ylab = "Weight", xlab = "Sex")
 ##do the two population have the same variances? use "f-test". answer = no because p-value < 0.05
-var.test(weight ~ sex, data = surveys_complete)
+result_ftest_weight <- var.test(weight ~ sex, data = surveys_complete)
 ##is there any significant difference between female and male weights? use "t-test".
 ##answer = no, because p value > 0.05. (female and male = same)
 t.test(weight ~ sex, data = surveys_complete, var.equal = FALSE)
+```
 
+In the mean weight analysis, the p-value of the test is 0.1337, which is higher than the significance level alpha = 0.05. With this result, we conclude that female's average weight is *not significantly different* from the male's average weight.
+
+```{r plot_e,echo=FALSE}
+#load the data
+surveys <- read.csv("data/portal_data_joined.csv")
+
+#clean the data from NA and blank value
+surveys_complete <- surveys %>%
+  filter(!is.na(hindfoot_length)) %>%
+  filter(!is.na(weight)) %>%
+  filter(sex !="") %>%
+  filter(species_id !="")
 #testing the mean hindfoot length between sex to see the difference
 #Is the mean hindfoot length of female is significantly different compared to the male?
-##compute the summary statistic
-surveys_complete %>% group_by(sex) %>%
-  summarise(count = n(),
-            mean = mean(hindfoot_length),
-            sd = sd(hindfoot_length))
 ##visualize the data using box plots
 ggboxplot(surveys_complete, x = "sex", y = "hindfoot_length", color = "sex", ylab = "Hindfoot Length", xlab = "Sex")
 ##do the two population have the same variances? use "f-test". answer = no because p-value < 0.05
-var.test(hindfoot_length ~ sex, data = surveys_complete)
+result_ftest_hindfootlength <-var.test(hindfoot_length ~ sex, data = surveys_complete)
 ##is there any significant difference between female and male hindfoot length? use "t-test".
 ##answer = no, because p value > 0.05. (female and male = same)
 t.test(hindfoot_length ~ sex, data = surveys_complete, var.equal = FALSE)
 
 ```
 
-
-
+In the mean hindfoot length analysis, the p-value of the test is < 2.2e-16, which is a lot lesser than the significance level alpha = 0.05. It concludes that female's average hindfoot length is *significantly different* from the male's average hindfoot length. 
