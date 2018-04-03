@@ -1,5 +1,5 @@
 ---
-title: "The Weight and Hindfoot Length Relationships of Rodents in southern Arizona"
+title: "The Weight and Hindfoot Length Relationships of Rodents in Southern Arizona"
 author: "Deky and Tono"
 date: "March 31, 2018"
 output:
