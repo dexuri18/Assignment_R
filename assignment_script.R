@@ -1,8 +1,8 @@
 #install and load the gridExtra and tidyverse library
 install.packages("gridExtra")
+install.packages("ggpubr")
 library(gridExtra)
 library(tidyverse)
-install.packages("ggpubr")
 library("ggpubr")
 
 #load the data
@@ -53,12 +53,10 @@ hlength_distribution <- ggplot(data = surveys_complete, aes(x = hindfoot_length)
 
 #mean weight and hindfoot length for each species
 weight_sum <- aggregate(surveys_complete["weight"], surveys_complete["species_id"], FUN = mean)
-rbind(head(weight_sum), tail(weight_sum))
 weight_sum_plot <- ggplot(weight_sum, aes(x = species_id, y = weight)) + 
   geom_bar(stat = "identity") + theme(axis.text.x = element_text(size = 8, angle = 90))
 
 hlength_sum <- aggregate(surveys_complete["hindfoot_length"], surveys_complete["species_id"], FUN = mean)
-rbind(head(hlength_sum), tail(hlength_sum))
 hlength_sum_plot <- ggplot(hlength_sum, aes(x = species_id, y = hindfoot_length)) + 
   geom_bar(stat = "identity") + theme(axis.text.x = element_text(size = 8, angle = 90))
 
@@ -139,7 +137,7 @@ lm_weight_vs_length <- lm(hindfoot_length ~ weight, data=most_common_data)
 summary(lm_weight_vs_length)
 plot(lm_weight_vs_length)
 
-#testing the mean weight between sex to see the different 
+#testing the mean weight between sex to see the difference
 #Is the mean weight of female is significantly different compared to the male?
 ##compute the summary statistic
 surveys_complete %>% group_by(sex) %>%
@@ -149,7 +147,22 @@ surveys_complete %>% group_by(sex) %>%
 ##visualize the data using box plots
 ggboxplot(surveys_complete, x = "sex", y = "weight", color = "sex", ylab = "Weight", xlab = "Sex")
 ##do the two population have the same variances? use "f-test". answer = no because p-value < 0.05
-result.ftest <- var.test(weight ~ sex, data = surveys_complete)
+var.test(weight ~ sex, data = surveys_complete)
 ##is there any significant difference between female and male weights? use "t-test".
 ##answer = no, because p value > 0.05. (female and male = same)
 t.test(weight ~ sex, data = surveys_complete, var.equal = FALSE)
+
+#testing the mean hindfoot length between sex to see the difference
+#Is the mean hindfoot length of female is significantly different compared to the male?
+##compute the summary statistic
+surveys_complete %>% group_by(sex) %>%
+  summarise(count = n(),
+            mean = mean(hindfoot_length),
+            sd = sd(hindfoot_length))
+##visualize the data using box plots
+ggboxplot(surveys_complete, x = "sex", y = "hindfoot_length", color = "sex", ylab = "Hindfoot Length", xlab = "Sex")
+##do the two population have the same variances? use "f-test". answer = no because p-value < 0.05
+var.test(hindfoot_length ~ sex, data = surveys_complete)
+##is there any significant difference between female and male hindfoot length? use "t-test".
+##answer = no, because p value > 0.05. (female and male = same)
+t.test(hindfoot_length ~ sex, data = surveys_complete, var.equal = FALSE)
