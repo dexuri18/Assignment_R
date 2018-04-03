@@ -24,7 +24,7 @@ This repository consists of:
 7. scripts.Rproj. It is the project file for RStudio.
 
 ## How to
-to replicate the process:
+To replicate the process:
 1. Install the RStudio
 2. Install the packages
 3. Load all the library()
@@ -33,11 +33,21 @@ to replicate the process:
 6. Open the * .R file (script file) 
 7. Open the * .Rmd file (Rmarkdown file)
 
-## Analysis in this repository
+## Statistical analysis in this repository
 Analysis conducted in this repository included:
 1. Adding the trendline on the plot to see the R2
 2. Linear model analysis to see the relationship between two variables
 3. F-test (statistical test) to see the variances between two population
 4. T-test (statistical test) to see the difference between two population
 
----to be continued---
+## Working procedures in this repository
+Procedures performed in this repository included:
+1. Cleaning up the incomplete data  
+2. Plotting the general information about the data based on the number of samples for each species and genus, also the proportion of sex (female and male) for each category
+3. Plotting the distribution of weight and hindfoot length for the overall sample and the distribution of the mean (weight) weight and hindfoot length for each species
+4. Plotting the weight and hindfoot length relationship analysis for all complete dataset
+5. Perform the linear model of weight and hindfoot length of the merriami species
+6. Perform the T-test to see if the mean weight and the hindfoot length of female species are significantly different from the male species. 
+
+
+
