@@ -1,5 +1,5 @@
 ---
-title: "Relationships of Weight and Hindfoot Length on Rodents in RI"
+title: "The Weight and Hindfoot Length Relationships of Rodents in southern Arizona"
 author: "Deky and Tono"
 date: "March 31, 2018"
 output:
@@ -15,9 +15,9 @@ library(gridExtra)
 library("ggpubr")
 ```
 
-## Summary of The Data
+## Summary of the Data
 
-The data of Rodent were taken from 1977 until 2002 with total 34,786 records have been colected. However, out of the total data, some records are incomplete and thus would be biased if included in the analysis. The following is a comparison of complete and incomplete data counts, in which further the complete data will be used in the analysis.
+Data used in this assignment was derived from the time series data which were collected from 1977 to 2002 with the total numbers of recorded data is 34,786.  However, we found that some of the records are incomplete which could lead to bias in our analysis. Therefore, we excluded the incomplete data in our further analysis. The comparison of the complete and incomplete data entries can be seen in Figure below.
 
 ```{r plot1, echo=FALSE}
 surveys <- read.csv("data/portal_data_joined.csv") 
@@ -42,7 +42,7 @@ pie(slices,labels = lbls, col=rainbow(length(lbls)),
     main="Pie Chart of Data Completeness")
 ```
 
-Data that has been done validation and complete hereinafter seen the distribution of the number of samples per species and genus, as follows:
+The figure below delineates the general patterns of the data based on the number of samples for each species and genus, also the proportion of sex (female and male) for each category. 
 
 ```{r plot2,echo=FALSE}
 #load the data
@@ -64,13 +64,88 @@ genus_plot <- ggplot(data = surveys_complete) + geom_bar(mapping = aes(x = genus
   theme(axis.text.x = element_text(angle = 30, size = 8))
 
 #combine species plot and genus plot together
-grid.arrange(species_plot, genus_plot, ncol=2, widths=c(6,6))
+grid.arrange(species_plot, genus_plot, ncol=2, widths=c(8,7))
 
 ```
 
-##Common Records
+In addition to the general pattern of the data in the above, we also plotted the distribution of weight and hindfoot length for the overall sample and the distribution of the average (mean) weight and hindfoot length for each species, as follows: 
 
-From the distribution of the number of samples per species above shows that only 4 species that have recoded above 2500 times from 1977 until 2002. That are baileyi, merriami, ordii and penicillatus. Below are the summary of weight and length of hindfoot of the 4 species.
+```{r plot_a,echo=FALSE}
+#load the data
+surveys <- read.csv("data/portal_data_joined.csv")
+
+#clean the data from NA and blank value
+surveys_complete <- surveys %>%
+  filter(!is.na(hindfoot_length)) %>%
+  filter(!is.na(weight)) %>%
+  filter(sex !="") %>%
+  filter(species_id !="")
+
+#weight and hindfoot_length distribution 
+weight_distribution <- ggplot(data = surveys_complete, aes(x = weight)) + 
+  geom_histogram(stat = "bin", binwidth = 3)
+hlength_distribution <- ggplot(data = surveys_complete, aes(x = hindfoot_length)) + 
+  geom_histogram(stat = "bin", binwidth = 2)
+
+#mean weight and hindfoot length for each species
+weight_sum <- aggregate(surveys_complete["weight"], surveys_complete["species_id"], FUN = mean)
+weight_sum_plot <- ggplot(weight_sum, aes(x = species_id, y = weight)) + 
+  geom_bar(stat = "identity") + theme(axis.text.x = element_text(size = 8, angle = 90))
+
+hlength_sum <- aggregate(surveys_complete["hindfoot_length"], surveys_complete["species_id"], FUN = mean)
+hlength_sum_plot <- ggplot(hlength_sum, aes(x = species_id, y = hindfoot_length)) + 
+  geom_bar(stat = "identity") + theme(axis.text.x = element_text(size = 8, angle = 90))
+
+#combine four plots together
+grid.arrange(weight_distribution, hlength_distribution, weight_sum_plot, 
+             hlength_sum_plot, ncol=2, widths=c(6,6))
+```
+
+##The Weight and Hindfoot Length Relationship Analysis
+
+###All species
+
+The general pattern of the weight and hindfoot length relationship of all species combined follows the bounded exponential trendline. Based on the R^2^ result, roughly around 72.5% of the population are matched with this trendline. 
+
+```{r plot_b,echo=FALSE}
+#load the data
+surveys <- read.csv("data/portal_data_joined.csv")
+
+#clean the data from NA and blank value
+surveys_complete <- surveys %>%
+  filter(!is.na(hindfoot_length)) %>%
+  filter(!is.na(weight)) %>%
+  filter(sex !="") %>%
+  filter(species_id !="")
+
+#plotting the relationship between weight and hindfoot length for all species
+plot_1 <- ggplot(surveys_complete, aes(x = weight, y = hindfoot_length, color = genus)) +
+  geom_point(shape = 2, size = 1)
+plot_2 <- plot_1 + geom_smooth(mapping = aes(linetype = "r2"), 
+                               method = "lm",
+                               formula = y ~ x + log(x), se = FALSE,
+                               color = "red") 
+plot_3 <- plot_2 + ggtitle("Relationship between weight and hindfoot length for all species") +
+  scale_x_continuous(name = "Weight") + scale_y_continuous(name = "Hindfoot Length")
+plot_4 <- plot_3 + theme_minimal() + 
+  theme(text = element_text(color = "gray20"), 
+        legend.position = c("right"), 
+        legend.text = element_text(size = 8, color = "gray20"),
+        axis.text = element_text(face = "italic"), 
+        axis.title.x = element_text(size = 9, face = "bold", color = "gray20" ),
+        axis.title.y = element_text(size = 9, face = "bold", color = "gray20"),
+        title = element_text(size = 10, face = "bold", color = "gray20")) 
+mR2 <- summary(lm(hindfoot_length ~ weight + log(weight), data = surveys_complete))$r.squared
+mR2 <- paste0(format(mR2, digits = 3))
+plot_4 + scale_linetype(name = "", breaks = "r2",
+                 labels = list(bquote(R^2==.(mR2))), 
+                 guide = guide_legend(override.aes = list(linetype = 1, size = 2, color = "red")))
+```
+
+###The most recorded species
+
+From the distribution of the number of samples per species in the above, it shows that only four species that have recoded sample above 2500 entries from the period of 1977 to 2002. These species included, baileyi, merriami, ordii and penicillatus. Figures below are the summary of weight and length of hindfoot of the four species. 
+
 ```{r plot3,echo=FALSE}
 #load the data
 surveys <- read.csv("data/portal_data_joined.csv")
@@ -95,8 +170,7 @@ surveys_common <- surveys_complete %>%
 ggplot(surveys_common, aes(x = species, y = weight)) + geom_boxplot()+xlab("Species")
 ```
 
-Species ordii has the highest mean weight among the other.
-
+From the results, the ordii species has the highest mean weight among the other, whereas, the merriami species has the highest hindfoot length followed by ordii species in the second place. 
 
 ```{r plot4,echo=FALSE}
 
@@ -124,11 +198,9 @@ ggplot(surveys_common, aes(x = species, y = hindfoot_length)) + geom_boxplot()+x
 
 ```
 
-Species meriami has the highest length of hidfoot with spesies ordii just slightly behind the first.
+###The linier model of weight and hindfoot length of the merriami species
 
-##Linier Model of Weight and Hindfoot Length
-
-Analysis of the relationship of weight and hindfoot length is done to the species with the largest sample number, that is merriami, by using linear model. From the analysis obtained linear model as follows:
+In order to analyze the weight and hindfoot length relationship thoroughly, we analyze the data from the species which has the most significant sample number which is *merriami* species. The analysis was done using the linear model, as follows:
 
 ```{r plot5, echo=FALSE}
 #load the data
@@ -159,7 +231,7 @@ lm_weight_vs_length <- lm(hindfoot_length ~ weight, data=most_common_data)
 plot(lm_weight_vs_length)
 ```
 
-with the summary of the linier model is listed below:
+The summary of the linear model is listed below:
 
 ```{r plot6,echo=FALSE}
 #load the data
@@ -189,7 +261,7 @@ lm_weight_vs_length <- lm(hindfoot_length ~ weight, data=most_common_data)
 summary(lm_weight_vs_length)
 ```
 
-from the result of linier model above can be drawn conclusion that .....
+As we can from the linear model result in the above, the R^2^ shows that roughly around 12% of the population fitted to the linear model. The p-value is smaller than the significance level 0.05 implying that there is no relationship between the mean weight and the hindfoot length of the merriami species. In other words, the size of the hindfoot length is not associated with the weight of this species and vice versa.
 
 
 
