@@ -19,6 +19,8 @@ library("ggpubr")
 
 The data of Rodent were taken from 1977 until 2002 with total 34,786 records have been colected. However, out of the total data, some records are incomplete and thus would be biased if included in the analysis. The following is a comparison of complete and incomplete data counts, in which further the complete data will be used in the analysis.
 
+
+
 ```{r plot1, echo=FALSE}
 surveys <- read.csv("data/portal_data_joined.csv") 
 
