@@ -3,8 +3,8 @@ title: "The Weight and Hindfoot Length Relationships of Rodents in Southern Ariz
 author: "Deky and Tono"
 date: "March 31, 2018"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
   word_document: default
 ---
 
@@ -230,25 +230,13 @@ lm_weight_vs_length <- lm(hindfoot_length ~ weight, data=most_common_data)
 summary(lm_weight_vs_length)
 ```
 
-#### Coefficient - Estimate
-The coefficient Estimate contains two rows; the first one is the intercept. The intercept is essentially the expected value of the length of hindfoot considering the average weight of all merriami in the dataset. In other words, it takes an average length of hindfoot in our dataset 32.69 mm to the weight. The second row in the Coefficients is the slope. The slope term in the model is saying that for every 1 gram increase in the weight, the length of hindfoot will goes up for 0.076 mm.
+From the intercept, it can be estimated that the mean value of hindfoot length considering the weight is 32.69 mm. From the slope term in the model, it can be said that for every 1 gram increase in weight, the hindfoot length will rise by 0.076386 mm. The Standard Error measures the average number that the coefficient estimates vary from the true average value of  variables, which can be said that the length of hindfoot corresponding to the weight stated earlier may vary by 0.002024 mm.
 
-#### Coefficient - Standard Error
-The coefficient Standard Error measures the average amount that the coefficient estimates vary from the actual average value of our response variable. We can say that the length of hindfoot according to the weight that said previously can vary by 0.002024 mm. The Standard Errors can also be used to compute confidence intervals and to statistically test the hypothesis of the existence of a relationship between weight and length of hindfoot.
+From the value of t and The Pr (> t) generated from the model, the relationship between the hindfoot length and weight can be predicted. The t-value coefficient is a measure of how much the standard deviation estimates the coefficient away from 0. The t-statistical value is relatively far from zero and relatively large against the standard error, which can indicate the relationship exists. Pr (> t) found in the model output corresponds to the probability of observing any value equal to or greater than t. From the model, the p-value is very close to zero. Three "stars" represent a very significant p value. Consequently, the small p-values for intercept and slope indicate that we can conclude that **there is a relationship between the length of hindfoot and the weight of species merriami**.
 
-#### Coefficient - t value
-The coefficient t-value is a measure of how many standard deviations the coefficient estimate is far away from 0. The t-statistic values are relatively far away from zero and are large relative to the standard error, which could **indicate a relationship exists**.
+The Residual Standard Error is 1.362, which it is san be said that the percentage error is 4.17%. Also note that the Residual Standard Error is calculated with 9725 degrees of freedom. Simply put, the degree of freedom is the number of data points that go into the estimated parameters used after taking into account this parameter (restriction). In this case, we have more than 9,000 data points and two parameters (intercept and slope).
 
-#### Coefficient - Pr(>t)
-The Pr(>t) acronym found in the model output relates to the probability of observing any value equal or larger than t. A small p-value indicates that it is unlikely we will observe a relationship between the predictor (speed) and response (dist) variables due to chance. Typically, a p-value of 5% or less is a good cut-off point. From the model, the p-values are very close to zero. Three stars (or asterisks) represent a highly significant p-value. Consequently, a small p-value for the intercept and the slope indicates that we can conclude that **there is a relationship between length of hindfoot and weight on merriami**.
-
-#### Residual Standard Error
-
-Residual Standard Error is measure of the quality of a linear regression fit. Theoretically, every linear model is assumed to contain an error term E. Due to the presence of this error term, we are not capable of perfectly predicting our response variable (length of hindfoot) from the predictor (weight) one. The Residual Standard Error is the average amount that the response (length of hindfoot) will deviate from the true regression line. In our example, the actual legth of hindfoot can deviate from the true regression line by approximately 1.362 mm on average. In other words, given that the mean legth of hindfoot for all weight is 32.67 and that the Residual Standard Error is 1.362, we can say that the percentage error is (any prediction would still be off by) 4.17%. It's also worth noting that the Residual Standard Error was calculated with 9725 degrees of freedom. Simplistically, degrees of freedom are the number of data points that went into the estimation of the parameters used after taking into account these parameters (restriction). In this case, we had more than 9,000 data points and two parameters (intercept and slope).
-
-#### Multiple R-squared, Adjusted R-squared
-
-The R-squared (R2) statistic provides a measure of how well the model is fitting the actual data. It takes the form of a proportion of variance. R2 is a measure of the linear relationship between the predictor variable (weight) and the response / target variable (length of hindfoot). The R2 we get is 0.1277. Or roughly 13% of the variance found in the response variable (length of hindfoot) can be explained by the predictor variable (weight).
+R-squared statistics (R2) give a measure of how well this model fits with the actual data. The R2 we get is 0.1277. Or about 13% of the variants found in the response variable (hindfoot length) can be explained by the predictor variable (by weight)
 
 ###Additional analysis
 
