@@ -17,9 +17,7 @@ library("ggpubr")
 
 ## Summary of the Data
 
-Data used in this assignment was derived from the time series data which were collected from 1977 to 2002 with the total numbers of recorded data is 34,786.  However, we found that some of the records are incomplete which could lead to bias in our analysis. Therefore, we excluded the incomplete data in our further analysis. The comparison of the complete and incomplete data entries can be seen in Figure below.
-
-
+Data used in this assignment was derived from the time series data which were collected from 1977 to 2002 with the total numbers of recorded data is 34,786.  However, we found that some of the records are incomplete which could lead to bias in our analysis. Therefore, we excluded the incomplete data in our further analysis. The comparison of the complete and incomplete data entries can be seen in Figure below. Out of the total data, there were 12% uncomplete records that we excluded from our analysis. The remaining 88% were served as the basis data of the analysis. 
 
 ```{r plot1, echo=FALSE}
 surveys <- read.csv("data/portal_data_joined.csv") 
@@ -44,7 +42,7 @@ pie(slices,labels = lbls, col=rainbow(length(lbls)),
     main="Pie Chart of Data Completeness")
 ```
 
-The figure below delineates the general patterns of the data based on the number of samples for each species and genus, also the proportion of sex (female and male) for each category. 
+From the total 88% of complete data, we further delineated the data profile based on the number of species and genus that had been recorded. The figure below delineates the general patterns of the data based on the number of samples for each species and genus, also the proportion of sex (female and male) for each category. From the figure below, we can see that species_id DM (merriami species) dominated the species entered in this data. With this condition we can assume that this species is the most abundance species in the study area. As merriami species is belong to the Dipodomys, the abundance of merriami species controled the amount of Dipodomys genus entered in this data. This figure also delineates roughly that the males are more dominant than the females. Here we can see that the blue bars are taller than the orange bars almost at every bars in both plots (species_id and genus). 
 
 ```{r plot_a,echo=FALSE}
 #load the data
@@ -70,7 +68,7 @@ grid.arrange(species_plot, genus_plot, ncol=2, widths=c(8,7))
 
 ```
 
-In addition to the general pattern of the data in the above, we also plotted the distribution of weight and hindfoot length for the overall sample and the distribution of the average (mean) weight and hindfoot length for each species, as follows: 
+In addition to the general pattern of the data in the above, we also plotted the distribution of weight and hindfoot length for the overall sample and the distribution of the average (mean) weight and hindfoot length for each species. From these plots, we can see that most of the weight are fall in between 10 to 60 grams. Meanwhile, from the hindfoot length, we can see that there are three clusters such as 15 mm to 25 mm, 32 mm to 38 mm, and small amount of +- 50 mm. From the mean weight for each species id, the species id NL (albigula species) have the highest weight which is above 150 grams, followed by the species id DS (spectabilis species) in the second place just below 125 grams. However, the weight of species id  NL does not correspond to the its hindfoot length. In this category, the longest hindfoot length is found on species is DS where the species id NL just in fourth place (around 32 mm). 
 
 ```{r plot_b,echo=FALSE}
 #load the data
@@ -107,7 +105,7 @@ grid.arrange(weight_distribution, hlength_distribution, weight_sum_plot,
 
 ###All species
 
-The general pattern of the weight and hindfoot length relationship of all species combined follows the bounded exponential trendline. Based on the R^2^ result, roughly around `r paste0(format((summary(lm(hindfoot_length ~ weight + log(weight), data = surveys_complete))$r.squared), digits = 3)) ` of the population are matched with this trendline. 
+The general pattern of the weight and hindfoot length relationship of all species combined follows the bounded exponential trendline. Based on the R^2^ result, roughly around `r paste0(format((summary(lm(hindfoot_length ~ weight + log(weight), data = surveys_complete))$r.squared), digits = 3)) ` of the population are matched with this trendline. From the this trendline, we can assume that, overall, the growth in hindfoot length are likely stopped at around 40 to 50 mm while the weight could continue growing more than 200 grams. In another word, we can assume that the rodent could gain more weight without gaining more length in hindfoot length.  
 
 ```{r plot_c,echo=FALSE}
 #load the data
@@ -202,7 +200,7 @@ ggplot(surveys_common, aes(x = species, y = hindfoot_length)) + geom_boxplot()+x
 
 ###The linear model of weight and hindfoot length of the merriami species
 
-In order to analyze the weight and hindfoot length relationship thoroughly, we analyze the data from the species which has the most significant sample number which is *merriami* species. The analysis was done using the linear model, with summary as follows:
+In order to analyze the weight and hindfoot length relationship thoroughly, we analyze the data from the species which has the most significant sample number which is **merriami** species. The analysis was done using the linear model, with summary as follows:
 
 ```{r plot5,echo=FALSE}
 #load the data
@@ -278,7 +276,7 @@ result_ftest_weight <- var.test(weight ~ sex, data = surveys_complete)
 t.test(weight ~ sex, data = surveys_complete, var.equal = FALSE)
 ```
 
-In the mean weight analysis, the p-value of the test is 0.1337, which is higher than the significance level alpha = 0.05. With this result, we conclude that female's average weight is *not significantly different* from the male's average weight.
+In the mean weight analysis, the p-value of the test is 0.1337, which is higher than the significance level alpha = 0.05. With this result, we conclude that female's average weight is **not significantly different** from the male's average weight.
 
 ```{r plot_e,echo=FALSE}
 #load the data
@@ -302,4 +300,4 @@ t.test(hindfoot_length ~ sex, data = surveys_complete, var.equal = FALSE)
 
 ```
 
-In the mean hindfoot length analysis, the p-value of the test is < 2.2e-16, which is a lot lesser than the significance level alpha = 0.05. It concludes that female's average hindfoot length is *significantly different* from the male's average hindfoot length. 
+In the mean hindfoot length analysis, the p-value of the test is < 2.2e-16, which is a lot lesser than the significance level alpha = 0.05. It concludes that female's average hindfoot length is **significantly different** from the male's average hindfoot length. 
